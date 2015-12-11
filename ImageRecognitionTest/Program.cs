@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.IO;
 
 namespace ImageRecognitionTest
 {
@@ -11,6 +12,8 @@ namespace ImageRecognitionTest
     {
         static void Main(string[] args)
         {
+            CreateImage();
+
             // Load image file
             using (var bmp = new Bitmap("image.png"))
             {
@@ -82,6 +85,25 @@ namespace ImageRecognitionTest
 
             Console.WriteLine("Process completed.");
             Console.ReadLine();
+        }
+
+        private static void CreateImage()
+        {
+            if (!File.Exists("image.png"))
+            {
+                Console.WriteLine("Image not found. Creating 'image.png'");
+                using (var bmp = new Bitmap(100, 100))
+                {
+                    using (var gr = Graphics.FromImage(bmp))
+                    {
+                        gr.FillRectangle(Brushes.White, 0, 0, 100, 100);
+                        gr.DrawEllipse(Pens.Red, 10, 10, 80, 80);
+                    }
+
+                    var path = "image.png";
+                    bmp.Save(path);
+                }
+            }
         }
     }
 }
